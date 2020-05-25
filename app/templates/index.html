@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Hello OpenCV.js</title>
+
+<style>
+#fileInput {
+  background-color: beige;
+  width: 100%;
+  display:block;
+}
+#leftpane, #rightpane {
+  border: 1px solid blue;
+  float:left;
+  width:49%;
+}
+#leftcanvas, #rightcanvas {
+  border: 1px solid black;
+  width: 100%;
+}
+
+.search-table-outter {border:2px solid red;}
+.search-table{table-layout: fixed; margin:40px auto 0px auto; }
+.search-table, td, th{border-collapse:collapse; border:1px solid #777;}
+th{padding:20px 7px; font-size:15px; color:#444; background:#66C2E0;}
+td{padding:5px 10px; height:35px;}
+
+.search-table-outter { overflow-x: scroll; }
+th, td { min-width: 200px; }
+
+</style>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/main2.js') }}"></script> 
+<script type="text/javascript" src="{{ url_for('static', filename='js/matrix22.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/point.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/grid_definer.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/deformation.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/interpolation.js') }}"></script>
+<script>
+  var current_guidelines = JSON.parse({{ current_guidelines | tojson | safe}});
+  var imgurl = "{{url_for('download_file', filename=current_imgname)}}";
+</script>
+<!-- script type="text/javascript" src="./js/main2.js"></script> 
+<script type="text/javascript" src="./js/matrix22.js"></script> 
+<script type="text/javascript" src="./js/point.js"></script> 
+<script type="text/javascript" src="./js/grid_definer.js"></script> 
+<script type="text/javascript" src="./js/deformation.js"></script> 
+<script type="text/javascript" src="./js/interpolation.js"></script--> 
+</head>
+<body>
+<h2>DE WARP</h2>
+<h3>{{current_imgname}}</h3>
+<p>instruction</p>
+
+<div class="search-table-outter wrapper">
+<table class="search-table inner">
+<tr>
+{% for imgname in imgnames %}
+<th><a href={{ url_for('image', imgname=imgname) }}>{{ imgname }}</a></th>
+{% endfor %}
+</tr>
+<tr>
+  {% for imgstatus in imgstatuses %}
+  <td>{{ imgstatus }}</td>
+  {% endfor %}
+  </tr>
+</table>
+</div>
+
+<form id="updatework" action={{ url_for('update') }}>
+<input type="hidden" id="current_imgname" name="imgname" value={{current_imgname}}>
+<input type="text" id="status" name="status">
+<input type="submit" id="updateButton" name="update" value="Update">
+</form>
+
+<div>
+  <input type="file" id="fileInput" name="file" style="display:none"/>
+  <img id="htmlimg" style="display:none"/>
+
+  <div id="leftpane">
+    <canvas id="leftcanvas" ></canvas>
+  </div>
+
+  <div id="rightpane">
+    <canvas id="rightcanvas" ></canvas>
+  </div>
+
+
+</body>
+</html>
